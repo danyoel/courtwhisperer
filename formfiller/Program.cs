@@ -1,4 +1,15 @@
-﻿using System;
+﻿/*
+ * Form Filler: fills in a Word Doc whose bookmarks correspond to property names in a
+ * JSON blob retrieved from Azure blob storage.
+ *
+ * Written for the 2015 Seattle Social Justice Hackathon #SSJH
+ *
+ * Author: Dan Liebling <dan@liebling.org>
+ * Date:   2015-11-07
+ *
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
@@ -17,7 +28,7 @@ using static System.Console;
 
 namespace formfiller
 {
-    class Program
+    static class Program
     {
         static void Main(string[] args)
         {
@@ -27,6 +38,9 @@ namespace formfiller
             {
                 object docname = @"c:\src\legalvoice\formfiller\dissowithmarkup.docx";
                 var doc = app.Documents.Open(ref docname);
+
+                WriteLine("Press ENTER to read the posted data.");
+                ReadLine();
 
                 WriteLine("getting latest blob");
                 var latest = TTask.Run(async () => await GetLatestBlobAsync()).Result;
@@ -38,7 +52,7 @@ namespace formfiller
                 else
                 {
                     WriteLine("filling in form");
-                    FillForm((JObject) latest, doc);
+                    FillForm(latest, doc);
 
                     WriteLine("exporting PDF");
                     var pdf = ExportPDF(doc);
@@ -49,43 +63,33 @@ namespace formfiller
                 object saveChanges = false;
                 doc.Close(ref saveChanges);
             }
-            finally {
+            finally
+            {
                 app.Quit();
             }
+
+            /*var latest = TTask.Run(async () => await GetLatestBlobAsync()).Result;
+            Console.WriteLine(latest.ToString(Formatting.Indented));
+            Console.ReadLine();*/
         }
+
 
 
         private static void FillForm(JObject latest, Document doc)
         {
             foreach (var bm in doc.Bookmarks.Cast<Bookmark>()) {
-                var prop = latest.Property(bm.Name);
-                if (prop != null)
+                //var prop = latest.Property(bm.Name);
+                var value = BookmarkLookup.Value(latest, bm.Name);
+
+                if (value != null)
                 {
-                    string value = null;
-                    switch (prop.Value.Type)
-                    {
-                        case JTokenType.String:
-                            value = prop.Value<string>();
-                            break;
-                        case JTokenType.Boolean:
-                            value = prop.Value<bool>() ? "√" : null;
-                            break;
-                        default:
-                            WriteLine($"unexpected property type: {prop.Value.Type}");
-                            break;
-                    }
+                    WriteLine($"set {bm.Name} to \"{value}\"");
+                    bm.Range.Text = value;
+                    bm.Range.Font.Color = WdColor.wdColorBlue;
                 }
             }
         }
-
-        
-        /// <summary>Makes a convenient dictionary for accessing the Word bookmarks</summary>
-        /// <param name="doc"></param>
-        /// <returns></returns>
-        private static Dictionary<string, Bookmark> MapBookmarks(Document doc)
-        {
-            return doc.Bookmarks.Cast<Bookmark>().ToDictionary(bm => bm.Name, bm => bm);
-        }
+     
 
 
         private static string ExportPDF(Document doc)
@@ -102,7 +106,7 @@ namespace formfiller
         }
 
 
-        static async Task<JToken> GetLatestBlobAsync()
+        static async Task<JObject> GetLatestBlobAsync()
         {
             var client = CloudStorageAccount.Parse(ConfigurationManager.AppSettings["connectionString"])
                 .CreateCloudBlobClient();
@@ -117,7 +121,7 @@ namespace formfiller
             var stream = await latest.OpenReadAsync();
             using (var reader = new StreamReader(stream))
             {
-                return JObject.ReadFrom(new JsonTextReader(reader));
+                return (JObject) JObject.ReadFrom(new JsonTextReader(reader));
             }
         }
     }
