@@ -107,6 +107,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
+    <Content Include="img\20699620022_c0b87f3dde_k.jpg" />
     <Content Include="index.html" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -121,6 +122,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+    <Content Include="privateSettings.config" />
     <None Include="Properties\PublishProfiles\legalvoice.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
