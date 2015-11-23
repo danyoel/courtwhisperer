@@ -1,0 +1,10 @@
+<ion-view view-title="Forms">
+  <ion-content>
+    <ion-list>
+      <ion-item ng-repeat="(id, form) in forms" href="#/tab/forms/{{id}}">
+        <p>{{form.name}}</p>
+        <p>{{form.description}}</p>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

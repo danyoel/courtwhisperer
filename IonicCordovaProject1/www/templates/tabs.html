@@ -1,0 +1,16 @@
+<!--
+Create tabs with an icon and label, using the tabs-stable style.
+Each tab's child <ion-nav-view> directive will have its own
+navigation history that also transitions its views in and out.
+-->
+<ion-tabs class="tabs-icon-top tabs-stable">
+    <!-- Forms Tab -->
+    <ion-tab title="Forms" icon-off="ion-ios-paper-outline" icon-on="ion-ios-paper" href="#/tab/forms">
+        <ion-nav-view name="tab-forms"></ion-nav-view>
+    </ion-tab>
+
+  <!-- Form Edit Tab -->
+  <ion-tab title="Edit" icon-off="ion-ios-compose-outline" icon-on="ion-ios-compose" href="#/tab/edit">
+    <ion-nav-view name="tab-edit"></ion-nav-view>
+  </ion-tab>
+</ion-tabs>
