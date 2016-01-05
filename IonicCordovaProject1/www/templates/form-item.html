@@ -1,0 +1,54 @@
+﻿<ion-view view-title="Item">
+    <ion-content>
+        <div class="bar bar-header cw-bg-blue cw-header">
+            <h1 class="title cw-fg-white">Court Whisperer</h1>
+            <button class="button button-icon icon ion-navicon cw-fg-white"></button>
+        </div>
+
+        <div class="row">
+            <div class="col cw-progress-outer">
+                <div class="cw-progress-inner" style="width:10%"></div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">10%</div>
+        </div>
+
+        <div class="row">
+            <div class="col" style="text-align:right">
+                <button ng-click="skipQuestion()" ng-disabled="!item.required" class="button-clear">
+                    skip question &gt;
+                </button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col cw-item-header">Question {{index + 1}}/{{form.itemCount}}</div>
+        </div>
+
+<!--        <div class="row">
+            <div class="col cw-item-name">{{item.name}}</div>
+        </div>
+    -->
+
+        <label class="item item-input item-stacked-label">
+            <span class="input-label">{{item.name}}</span>
+            <input type="text" ng-show="item.inputType == 'text'" ng-model="response" placeholder="your response" />
+            <input type="date" ng-show="item.inputType == 'date'" ng-model="response" />
+            <input type="checkbox" ng-show="item.inputType == 'boolean'" ng-model="response" />
+            <select ng-show="item.inputType == 'select'" ng-model="response">
+                <option ng-repeat="opt in item.values" value="{{opt}}">{{opt}}</option>
+            </select>
+        </label>
+
+        <div class="row">
+            <div class="col">
+                <button class="button button-block" ng-disabled="index == 0" ng-click="previousQuestion()">Prev</button>
+            </div>
+            <div class="col">
+                <button class="button button-block" ng-disabled="index == (form.itemCount - 1)" ng-click="nextQuestion()">Next</button>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

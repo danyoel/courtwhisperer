@@ -1,9 +1,34 @@
 <ion-view view-title="Forms">
   <ion-content>
+      <div class="bar bar-header cw-bg-blue cw-header">
+          <h1 class="title cw-fg-white">Court Whisperer</h1>
+          <button class="button button-icon icon ion-navicon cw-fg-white"></button>
+      </div>
+      <div class="cw-subheader">
+          <div class="row">
+              <div class="col">
+                  Forms for
+              </div>
+          </div>
+          <div class="row">
+              <div class="col">
+                  <select ng-model="state">
+                      <option ng-repeat="s in states">{{s}}</option>
+                  </select>
+              </div>
+              <div class="col">
+                  <select ng-model="county">
+                      <option ng-repeat="c in counties(state)">{{c}}</option>
+                  </select>
+              </div>
+          </div>
+      </div>
     <ion-list>
-      <ion-item ng-repeat="(id, form) in forms" href="#/tab/forms/{{id}}">
-        <p>{{form.name}}</p>
-        <p>{{form.description}}</p>
+      <ion-item ng-repeat="(id, form) in byJurisdiction(state, county)" href="#/form-intro/{{id}}" ng-disabled="!form.usable">
+        <p class="cw-form-header">{{form.name}}</p>
+        <p ng-show="form.usable"><i class="icon ion-android-time"></i> ~{{form.timeEstimate[0]}} - {{form.timeEstimate[1]}} minutes / {{form.itemCount}} questions</p>
+          <p ng-show="!form.usable"><i class="icon ion-android-warning"></i> Sorry, this form is unavailable right now.</p>
+        <!--<i class="icon ion-ios-arrow-right"></i>-->
       </ion-item>
     </ion-list>
   </ion-content>

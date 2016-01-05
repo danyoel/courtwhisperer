@@ -1,1 +1,52 @@
 /* Empty. Add your own CSS if you like */
+
+.cw-bg-blue {
+    background-color: rgb(24,125,163);
+}
+
+.cw-fg-blue {
+    color: rgb(24,125,163);
+}
+
+.cw-fg-white {
+    color: white;
+}
+
+img.cw-form-thumb {
+    margin-left:auto;
+    margin-right:auto;
+    display:block;
+    border:none;
+}
+
+.cw-progress-outer {
+    border: 2px solid rgb(24,125,163);
+    background-color: white;
+}
+
+.cw-progress-inner {
+    background-color: rgb(24,125,163);
+}
+
+.cw-item-header {
+    font-variant-caps: small-caps;
+    color: darkgray;
+    padding-bottom: 2px;
+    /*border-bottom: 1px solid darkgray;*/
+}
+
+p.cw-form-header {
+    font-size:14pt;
+    /*text-overflow:unset;
+    text-wrap:normal;*/
+    font-weight:bold;
+}
+
+.cw-subheader {
+    background-color:black;
+    color:white;
+}
+
+div.cw-header {
+    position: relative;
+}

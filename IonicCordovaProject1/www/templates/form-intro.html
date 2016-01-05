@@ -1,0 +1,31 @@
+﻿<ion-view view-title="Form">
+    <ion-content>
+        <div class="bar bar-header cw-bg-blue cw-header">
+            <h1 class="title cw-fg-white">Court Whisperer</h1>
+            <button class="button button-icon icon ion-navicon cw-fg-white"></button>
+        </div>
+        <div class="cw-subheader">
+            <div class="row">
+                <div class="col">&lt; (back link)</div>
+            </div>
+            <div class="row">
+                <div class="col" style="text-align:center">{{form.name}}</div>
+            </div>
+            <div class="row">
+                <div class="col" style="text-align:center">
+                    <i class="icon ion-android-time"></i> ~{{form.timeEstimate[0]}} - {{form.timeEstimate[1]}} minutes / {{form.itemCount}} questions
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col" style="text-align:center">{{form.description}}</div>
+        </div>
+        <div class="row">
+            <div class="col col-80">
+                <a href="#/form-item/{{id}}/0">
+                    <img ng-src="http://www.courtwhisperer.org/app/form-thumbs/{{id}}.png" class="cw-form-thumb" />
+                </a>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>
