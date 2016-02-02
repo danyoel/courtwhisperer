@@ -56,7 +56,7 @@ angular.module('starter.controllers', [])
         //$state.go("form-item", { "id": $scope.id, "index": $scope.index + 1 });
         $http({
             method: 'POST',
-            url: 'https://legalvoice.azurewebsites.net/Form',
+            url: 'https://legalvoice.azurewebsites.net/api/Form',
             data: {
                 form: $scope.id,
                 fields: getFields()
