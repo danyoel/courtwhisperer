@@ -6,6 +6,38 @@ function keys(obj) {
     return karr;
 }
 
+if (!Array.prototype.find) {
+    Array.prototype.find = function (predicate) {
+        if (this === null) {
+            throw new TypeError('Array.prototype.find called on null or undefined');
+        }
+        if (typeof predicate !== 'function') {
+            throw new TypeError('predicate must be a function');
+        }
+        var list = Object(this);
+        var length = list.length >>> 0;
+        var thisArg = arguments[1];
+        var value;
+
+        for (var i = 0; i < length; i++) {
+            value = list[i];
+            if (predicate.call(thisArg, value, i, list)) {
+                return value;
+            }
+        }
+        return undefined;
+    };
+}
+
+
+/*function Form(usable, name, description, itemCount, timeEstimate) {
+    this.usable = usable;
+    this.name = name;
+    this.description = description;
+    this.itemCount = itemCount;
+    this.timeEstimate = timeEstimate;
+}*/
+
 
 angular.module('starter.services', [])
 // ultimately these would be retrieved remotely, not hardcoded into the app.
@@ -92,10 +124,10 @@ angular.module('starter.services', [])
 
     var fields = {
         'WPF DR 01.0100': [
-            {
+/*            {
                 id: 'petitioner-name',
                 bookmarks: [],
-                name: 'Your full name',
+                name: 'Name',
                 description: 'Your name as it appears on your driver\'s licence or ID card',
                 inputType: 'text',
             },
@@ -103,7 +135,7 @@ angular.module('starter.services', [])
                 id: 'petitioner-birth-date',
                 bookmarks: [],
                 name: 'Your date of birth',
-                description: null,
+                description: 'Your date of birth',
                 inputType: 'date',
             },
             {
@@ -126,7 +158,7 @@ angular.module('starter.services', [])
                 id: 'respondent-birth-date',
                 bookmarks: [],
                 name: 'Spouse\'s birth date',
-                description: null,
+                description: 'Spouse\'s birth date',
                 inputType: 'date',
             },
             {
@@ -149,15 +181,17 @@ angular.module('starter.services', [])
                 name: 'Date of the marriage',
                 description: 'When did you get married?',
                 inputType: 'date',
-            },
+            },*/
             {
                 id: 'children',
                 output: false, // response will be excluded from data posted to server
-                name: 'Children',
+                name: 'Yes, one or both of us have children',
                 description: 'Do you or your spouse have any dependent children?',
                 inputType: 'boolean',
-                onChange: function (form, value) {
-                    form.enable(value, ['dual-dependents', 'petitioner-dependents', 'respondent-dependents']); 
+                onChange: function (Forms, formID, value) {
+                    Forms.enable(formID, 'dual-dependents', value);
+                    Forms.enable(formID, 'petitioner-dependents', value);
+                    Forms.enable(formID, 'respondent-dependents', value);
                 }
             },
             {
@@ -167,10 +201,10 @@ angular.module('starter.services', [])
                 description: 'For how many children are you and your spouse BOTH the legal (biological or adoptive) parents?',
                 inputType: 'select',
                 values: [1, 2, 3, 4, 5, 6],
-                onChange: function (form, value) {
+                onChange: function (Forms, formID, value) {
                     for (var i = 0; i < parseInt(value) ; i++) {
-                        form.enable('dual-children-' + i + '-name', true);
-                        form.enable('dual-children-' + i + '-dob', true);
+                        Forms.enable(formID, 'dual-children-' + i + '-name', true);
+                        Forms.enable(formID, 'dual-children-' + i + '-dob', true);
                     }
                 }
             },
@@ -181,11 +215,11 @@ angular.module('starter.services', [])
                 description: 'For how many children are ONLY you and NOT your spouse the legal (biological or adoptive) parent?',
                 inputType: 'select',
                 values: ['None', '1', '2'],
-                onChange: function (form, value) {
-                    if (value !== 'None') value = 0; else value = parseInt(value);
-                    for (var i = 0; i < 3; i++) {
-                        form.enable('petitioner-children-' + i + '-name', i < value);
-                        form.enable('petitioner-children-' + i + '-dob', i < value);
+                onChange: function (Forms, formID, value) {
+                    if (value === 'None') value = 0; else value = parseInt(value);
+                    for (var i = 0; i < 2; i++) {
+                        Forms.enable(formID, 'petitioner-children-' + i + '-name', i < value);
+                        Forms.enable(formID, 'petitioner-children-' + i + '-dob', i < value);
                     }
                 }
             },
@@ -196,11 +230,11 @@ angular.module('starter.services', [])
                 description: 'For how many children are ONLY your spouse and NOT yourself the legal (biological or adoptive) parent?',
                 inputType: 'select',
                 values: ['None', '1', '2'],
-                onChange: function (form, value) {
-                    if (value !== 'None') value = 0; else value = parseInt(value);
-                    for (var i = 0; i < 3; i++) {
-                        form.enable('respondent-children-' + i + '-name', i < value);
-                        form.enable('respondent-children-' + i + '-dob', i < value);
+                onChange: function (Forms, formID, value) {
+                    if (value === 'None') value = 0; else value = parseInt(value);
+                    for (var i = 0; i < 2; i++) {
+                        Forms.enable(formID, 'respondent-children-' + i + '-name', i < value);
+                        Forms.enable(formID, 'respondent-children-' + i + '-dob', i < value);
                     }
                 }
             },
@@ -369,6 +403,16 @@ angular.module('starter.services', [])
         ]
     };
 
+
+    var enable = function (formID, fieldID, enable) {
+        var field = fields[formID].find(function (f) {
+            return (f.id == fieldID);
+        });
+
+        field.enabled = enable;
+        forms[formID].itemCount += (enable ? 1 : -1);
+    };
+
     return {
         states: function () { return keys(jurisdictions); }, // Android lacks .keys() function
         counties: function (state) { return jurisdictions[state]; }, 
@@ -379,7 +423,8 @@ angular.module('starter.services', [])
             }, {});
         },
         get: function (id) { return forms[id]; },
-        fields: function (id) { return fields[id]; }
+        fields: function (id) { return fields[id]; },
+        enable: enable
     };
 })
 

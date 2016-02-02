@@ -12,8 +12,8 @@
           </div>
           <div class="row">
               <div class="col">
-                  <select ng-model="state">
-                      <option ng-repeat="s in states">{{s}}</option>
+                  <select ng-model="state" ng-options="s for s in states">
+                      <!--<option ng-repeat="s in states">{{s}}</option>-->
                   </select>
               </div>
               <div class="col">
