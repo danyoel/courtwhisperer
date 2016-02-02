@@ -60,7 +60,7 @@ angular.module('starter.services', [])
             usable: true,
             name: 'Petition for Dissolution of Marriage',
             description: '(long description)',
-            itemCount: 10,
+            itemCount: 2, //10,
             timeEstimate: [10, 20],
         },
         'WPF DRPSCU 09.0200': {
@@ -124,7 +124,7 @@ angular.module('starter.services', [])
 
     var fields = {
         'WPF DR 01.0100': [
-/*            {
+            {
                 id: 'petitioner-name',
                 bookmarks: [],
                 name: 'Name',
@@ -137,7 +137,7 @@ angular.module('starter.services', [])
                 name: 'Your date of birth',
                 description: 'Your date of birth',
                 inputType: 'date',
-            },
+            }/*,
             {
                 id: 'petitioner-location',
                 required: true,
@@ -181,7 +181,7 @@ angular.module('starter.services', [])
                 name: 'Date of the marriage',
                 description: 'When did you get married?',
                 inputType: 'date',
-            },*/
+            },
             {
                 id: 'children',
                 output: false, // response will be excluded from data posted to server
@@ -399,7 +399,7 @@ angular.module('starter.services', [])
                 description: 'This child\'s date of birth', // ideally we'd template with the name of the child :)
                 inputType: 'date',
                 enabled: false,
-            },
+            },*/
         ]
     };
 

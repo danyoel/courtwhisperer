@@ -1,0 +1,25 @@
+﻿<ion-view view-title="Finish">
+    <ion-content>
+        <div class="bar bar-header cw-bg-blue cw-header">
+            <h1 class="title cw-fg-white">Court Whisperer</h1>
+            <button class="button button-icon icon ion-navicon cw-fg-white"></button>
+        </div>
+
+        <h4 class="cw-description">Where should we send the completed document?</h4>
+
+
+        <form name="emailForm" class="css-form">
+            <div>
+                <label class="item item-input item-stacked-label">
+                    <input type="email" name="email" ng-model="emailAddress" placeholder="Email address" />
+                </label>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <button class="button button-block" ng-click="finish()" ng-disabled="emailForm.email.$error.email">I'm done!</button>
+                </div>
+            </div>
+        </form>
+    </ion-content>
+</ion-view>

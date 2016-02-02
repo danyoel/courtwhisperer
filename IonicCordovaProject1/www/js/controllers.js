@@ -43,10 +43,39 @@ angular.module('starter.controllers', [])
     }
 })
 
-/*.controller('EditCtrl', function ($scope, $stateParams, Forms) {
-    $scope.form = Forms.get($stateParams.id);
-    $scope.fields = Forms.fields($stateParams.id);
+.controller('FinishCtrl', function ($scope, $stateParams, $state, $http, $ionicPopup, Forms) {
+    $scope.id = $stateParams.id;
 
-})*/
+    function getFields() {
+        return Forms.fields($scope.id).map(function (field) {
+            return { id: field.id, response: field.response };
+        });
+    }
+
+    $scope.finish = function () {
+        //$state.go("form-item", { "id": $scope.id, "index": $scope.index + 1 });
+        $http({
+            method: 'POST',
+            url: 'https://legalvoice.azurewebsites.net/Form',
+            data: {
+                form: $scope.id,
+                fields: getFields()
+            }
+        }).then(function (response) {
+            $ionicPopup.show({
+                title: 'Success',
+                template: 'We\'ll email the completed form to you shortly.',
+                buttons: [ { text: 'Done' } ]
+            });
+        },
+        function (response) {
+            $ionicPopup.show({
+                title: 'Oops!',
+                template: 'We had a problem submitting your form. The error code is ' + response.status + '.',
+                buttons: [{ text: 'OK' }]
+            });
+        });
+    };
+})
 
 ;

@@ -59,6 +59,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         controller: 'FormItemCtrl'
     })
 
+    .state('finish', {
+        url: '/form-item/:id',
+        templateUrl: 'templates/finish.html',
+        controller: 'FinishCtrl'
+    })
+
     /*.state('tab.edit', {
         url: '/forms/:id',
         views: {
