@@ -31,16 +31,19 @@ angular.module('starter.controllers', [])
         if ($scope.item.onChange) {
             $scope.item.onChange(Forms, $scope.id, $scope.item.response);
         }
-        $state.go("form-item", { "id": $scope.id, "index": $scope.index + 1 });
+        if ($scope.index < $scope.form.itemCount - 1)
+            $state.go("form-item", { "id": $scope.id, "index": $scope.index + 1 });
+        else
+            $state.go("finish", { "id": $scope.id });
     };
 
     $scope.previousQuestion = function () {
         $state.go("form-item", { "id": $scope.id, "index": $scope.index - 1 });
     };
 
-    $scope.finish = function () {
+    /*$scope.finish = function () {
         $state.go("finish", { "id": $scope.id });
-    }
+    }*/
 })
 
 .controller('FinishCtrl', function ($scope, $stateParams, $state, $http, $ionicPopup, Forms) {

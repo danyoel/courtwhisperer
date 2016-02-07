@@ -59,12 +59,12 @@
             <div class="col">
                 <button class="button button-block" ng-disabled="index == 0" ng-click="previousQuestion()">Prev</button>
             </div>
-            <div class="col" ng-hide="index == (form.itemCount - 1)">
+            <div class="col"> <!-- ng-hide="index == (form.itemCount - 1)"> -->
                 <button class="button button-block" ng-click="nextQuestion()">Next</button>
             </div>
-            <div class="col" ng-hide="index != (form.itemCount - 1)">
+            <!--<div class="col" ng-hide="index != (form.itemCount - 1)">
                 <button class="button button-block" ng-click="finish()">Finish</button>
-            </div>
+            </div>-->
         </div>
     </ion-content>
 </ion-view>

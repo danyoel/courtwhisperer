@@ -59,8 +59,8 @@ angular.module('starter.services', [])
         'WPF DR 01.0100': {
             usable: true,
             name: 'Petition for Dissolution of Marriage',
-            description: '(long description)',
-            itemCount: 2, //10,
+            description: 'Commonly used for divorce in Washington State',
+            itemCount: 9, //10,
             timeEstimate: [10, 20],
         },
         'WPF DRPSCU 09.0200': {
@@ -137,7 +137,7 @@ angular.module('starter.services', [])
                 name: 'Your date of birth',
                 description: 'Your date of birth',
                 inputType: 'date',
-            }/*,
+            },
             {
                 id: 'petitioner-location',
                 required: true,
@@ -184,57 +184,29 @@ angular.module('starter.services', [])
             },
             {
                 id: 'children',
-                output: false, // response will be excluded from data posted to server
+                //output: false, // response will be excluded from data posted to server
                 name: 'Yes, one or both of us have children',
                 description: 'Do you or your spouse have any dependent children?',
                 inputType: 'boolean',
                 onChange: function (Forms, formID, value) {
                     Forms.enable(formID, 'dual-dependents', value);
-                    Forms.enable(formID, 'petitioner-dependents', value);
-                    Forms.enable(formID, 'respondent-dependents', value);
+                    //Forms.enable(formID, 'petitioner-dependents', value);
+                    //Forms.enable(formID, 'respondent-dependents', value);
                 }
             },
             {
                 id: 'dual-dependents',
                 output: false,
+                enabled: false,
                 name: 'Children of both spouses',
                 description: 'For how many children are you and your spouse BOTH the legal (biological or adoptive) parents?',
                 inputType: 'select',
-                values: [1, 2, 3, 4, 5, 6],
-                onChange: function (Forms, formID, value) {
-                    for (var i = 0; i < parseInt(value) ; i++) {
-                        Forms.enable(formID, 'dual-children-' + i + '-name', true);
-                        Forms.enable(formID, 'dual-children-' + i + '-dob', true);
-                    }
-                }
-            },
-            {
-                id: 'petitioner-dependents',
-                output: false,
-                name: 'Children of petitioner',
-                description: 'For how many children are ONLY you and NOT your spouse the legal (biological or adoptive) parent?',
-                inputType: 'select',
-                values: ['None', '1', '2'],
+                values: ['None', '1', '2'], //, 3, 4, 5, 6],
                 onChange: function (Forms, formID, value) {
                     if (value === 'None') value = 0; else value = parseInt(value);
-                    for (var i = 0; i < 2; i++) {
-                        Forms.enable(formID, 'petitioner-children-' + i + '-name', i < value);
-                        Forms.enable(formID, 'petitioner-children-' + i + '-dob', i < value);
-                    }
-                }
-            },
-            {
-                id: 'respondent-dependents',
-                output: false,
-                name: 'Children of petitioner',
-                description: 'For how many children are ONLY your spouse and NOT yourself the legal (biological or adoptive) parent?',
-                inputType: 'select',
-                values: ['None', '1', '2'],
-                onChange: function (Forms, formID, value) {
-                    if (value === 'None') value = 0; else value = parseInt(value);
-                    for (var i = 0; i < 2; i++) {
-                        Forms.enable(formID, 'respondent-children-' + i + '-name', i < value);
-                        Forms.enable(formID, 'respondent-children-' + i + '-dob', i < value);
+                    for (var i = 0; i < 6 ; i++) {
+                        Forms.enable(formID, 'dual-children-' + i + '-name', i < value);
+                        Forms.enable(formID, 'dual-children-' + i + '-dob', i < value);
                     }
                 }
             },
@@ -334,6 +306,21 @@ angular.module('starter.services', [])
                 inputType: 'date',
                 enabled: false,
             },
+            {
+                id: 'petitioner-dependents',
+                output: false,
+                name: 'Children of petitioner',
+                description: 'For how many children are ONLY you and NOT your spouse the legal (biological or adoptive) parent?',
+                inputType: 'select',
+                values: ['None', '1', '2'],
+                onChange: function (Forms, formID, value) {
+                    if (value === 'None') value = 0; else value = parseInt(value);
+                    for (var i = 0; i < 2; i++) {
+                        Forms.enable(formID, 'petitioner-children-' + i + '-name', i < value);
+                        Forms.enable(formID, 'petitioner-children-' + i + '-dob', i < value);
+                    }
+                }
+            },
             // petitioner only
             {
                 id: 'petitioner-children-0-name',
@@ -367,6 +354,21 @@ angular.module('starter.services', [])
                 inputType: 'date',
                 enabled: false,
             },
+            {
+                id: 'respondent-dependents',
+                output: false,
+                name: 'Children of petitioner',
+                description: 'For how many children are ONLY your spouse and NOT yourself the legal (biological or adoptive) parent?',
+                inputType: 'select',
+                values: ['None', '1', '2'],
+                onChange: function (Forms, formID, value) {
+                    if (value === 'None') value = 0; else value = parseInt(value);
+                    for (var i = 0; i < 2; i++) {
+                        Forms.enable(formID, 'respondent-children-' + i + '-name', i < value);
+                        Forms.enable(formID, 'respondent-children-' + i + '-dob', i < value);
+                    }
+                }
+            },
             // respondent only
             {
                 id: 'respondent-children-0-name',
@@ -399,7 +401,7 @@ angular.module('starter.services', [])
                 description: 'This child\'s date of birth', // ideally we'd template with the name of the child :)
                 inputType: 'date',
                 enabled: false,
-            },*/
+            },
         ]
     };
 
@@ -409,8 +411,10 @@ angular.module('starter.services', [])
             return (f.id == fieldID);
         });
 
+        var prev = field.enabled;
         field.enabled = enable;
-        forms[formID].itemCount += (enable ? 1 : -1);
+        if (prev != enable)
+            forms[formID].itemCount += (enable ? 1 : -1);
     };
 
     return {
